@@ -1,30 +1,24 @@
+import { Request, Response } from "express";
 import logger from "../../../../config/winstion";
-import supabase from "../../../middleware/supabase";
-
-const uploadSupabase = async (req, res) => {
+interface Authenticate extends Request {
+  fileUrl: string;
+}
+const getUploads = async (req: Authenticate, res: Response): Promise<any> => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
-
-    const { originalname, buffer } = req.file;
-    const { data, error } = await supabase.storage
-      .from("evc") // Replace with your bucket name
-      .upload(`${originalname}`, buffer, {
-        contentType: req.file.mimetype,
+    console.log(req.file);
+    console.log(req.fileUrl);
+    if (!req.fileUrl) {
+      return res.status(404).json({
+        mesagge: "Error occured",
       });
-
-    if (error) {
-      logger.error(error);
-      throw error;
     }
-
     res.status(200).json({
-      message: "File uploaded successfully",
-      fileUrl: process.env.BASE_URL + data.path,
+      message: "Photo uploaded successfully",
+      data: process.env.BASE_URL_AWS_S3 + req.fileUrl,
     });
-  } catch (err) {
-    res.status(500).json({ message: "Upload failed", error: err.message });
+  } catch (error) {
+    res.status(500).send(error);
   }
 };
-export default uploadSupabase;
+
+export default getUploads;

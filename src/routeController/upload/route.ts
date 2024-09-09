@@ -1,9 +1,12 @@
 import express from "express";
-import upload from "../../middleware/multer";
-import uploadSupabase from "./controller/uploadLogic";
+import getUploads from "./controller/uploadLogic";
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const uploadRoute = express.Router();
 
-uploadRoute.post("/", upload.single("file"), uploadSupabase);
+uploadRoute.post("/", upload.single("image"), getUploads);
 
 export default uploadRoute;
