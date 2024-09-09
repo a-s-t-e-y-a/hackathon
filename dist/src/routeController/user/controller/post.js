@@ -15,13 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const zod_1 = require("zod");
 const prisma_config_1 = __importDefault(require("../../../../config/prisma.config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const eventAuth_1 = require("../../../zod/eventAuth");
-const postEventAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const userAuth_1 = require("../../../zod/userAuth");
+const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data_ = eventAuth_1.evenOraganizerZod.parse(req.body);
+        const data_ = userAuth_1.userAuthZod.parse(req.body);
         const salt = yield bcrypt_1.default.genSalt(10);
         const hashedPassword = yield bcrypt_1.default.hash(data_.password, salt);
-        const data = yield prisma_config_1.default.eventOrganiser.create({
+        const data = yield prisma_config_1.default.user.create({
             data: {
                 name: data_.name,
                 email: data_.name,
@@ -43,5 +43,5 @@ const postEventAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
     }
 });
-exports.default = postEventAuth;
+exports.default = signup;
 //# sourceMappingURL=post.js.map

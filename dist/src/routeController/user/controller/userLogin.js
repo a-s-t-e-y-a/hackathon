@@ -15,20 +15,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const zod_1 = require("zod");
 const prisma_config_1 = __importDefault(require("../../../../config/prisma.config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const eventAuth_1 = require("../../../zod/eventAuth");
-const postEventAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const userAuth_1 = require("../../../zod/userAuth");
+// Replace with your actual secret key
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data_ = eventAuth_1.evenOraganizerZod.parse(req.body);
-        const salt = yield bcrypt_1.default.genSalt(10);
-        const hashedPassword = yield bcrypt_1.default.hash(data_.password, salt);
-        const data = yield prisma_config_1.default.eventOrganiser.create({
-            data: {
-                name: data_.name,
-                email: data_.name,
-                password: hashedPassword,
+        // Validate the incoming request data
+        const data_ = userAuth_1.userLogin.parse(req.body);
+        // Find the user by email
+        const user = yield prisma_config_1.default.user.findFirst({
+            where: { email: data_.email },
+        });
+        if (!user) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+        // Compare the provided password with the stored hashed password
+        const isMatch = yield bcrypt_1.default.compare(data_.password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+        // Generate a JWT token
+        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+        // Send the token in the response
+        res.status(200).json({
+            message: "Login successful user",
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
             },
         });
-        res.status(200).json({ message: "Validation successful", data });
     }
     catch (err) {
         if (err instanceof zod_1.ZodError) {
@@ -43,5 +61,5 @@ const postEventAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         }
     }
 });
-exports.default = postEventAuth;
-//# sourceMappingURL=post.js.map
+exports.default = login;
+//# sourceMappingURL=userLogin.js.map
