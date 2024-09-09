@@ -11,8 +11,8 @@ const eventInit = async (req, res) => {
         eventName: data_.eventName,
         ticketNo: data_.ticketNo,
         about: data_.about,
-        price: 400,
-        image: "12",
+        price: data_.price,
+        image: data_.image,
         eventOrganiser: { connect: { id: data_.eventOrganiserId } },
       },
     });
