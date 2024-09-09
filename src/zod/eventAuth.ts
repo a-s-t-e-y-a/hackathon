@@ -6,4 +6,9 @@ const evenOraganizerZod = z.object({
   password: z.string(),
 });
 
-export default evenOraganizerZod;
+const eventLoginZod = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+
+export { evenOraganizerZod, eventLoginZod };

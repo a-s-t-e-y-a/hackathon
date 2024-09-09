@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
 import prisma from "../../../../config/prisma.config";
-import evenOraganizerZod from "../../../zod/eventAuth";
 import bcrypt from "bcrypt";
+import { evenOraganizerZod } from "../../../zod/eventAuth";
 
 const postEventAuth = async (req, res) => {
   try {
