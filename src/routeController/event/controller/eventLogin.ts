@@ -11,6 +11,7 @@ const login = async (req, res) => {
   try {
     // Validate the incoming request data
     const data_ = eventLoginZod.parse(req.body);
+    console.log(data_);
 
     // Find the user by email
     const user = await prisma.eventOrganiser.findFirst({

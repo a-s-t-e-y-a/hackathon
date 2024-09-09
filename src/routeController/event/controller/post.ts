@@ -13,7 +13,7 @@ const postEventAuth = async (req, res) => {
     const data = await prisma.eventOrganiser.create({
       data: {
         name: data_.name,
-        email: data_.name,
+        email: data_.email,
         password: hashedPassword,
       },
     });
