@@ -4,6 +4,6 @@ import uploadSupabase from "./controller/uploadLogic";
 
 const uploadRoute = express.Router();
 
-uploadRoute.post("/", upload.single("image"), uploadSupabase);
+uploadRoute.post("/", upload.single("file"), uploadSupabase);
 
 export default uploadRoute;

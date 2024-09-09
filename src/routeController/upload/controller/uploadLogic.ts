@@ -3,14 +3,16 @@ import supabase from "../../../middleware/supabase";
 
 const uploadSupabase = async (req, res) => {
   try {
-    if (!req.image) {
+    if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
     const { originalname, buffer } = req.file;
     const { data, error } = await supabase.storage
       .from("evc") // Replace with your bucket name
-      .upload(`${originalname}`, req.file[0]);
+      .upload(`${originalname}`, buffer, {
+        contentType: req.file.mimetype,
+      });
 
     if (error) {
       logger.error(error);
