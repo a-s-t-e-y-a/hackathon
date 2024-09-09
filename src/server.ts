@@ -5,6 +5,7 @@ import mainRouter from "./mainRoute";
 const app = express();
 const PORT = 3001;
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1", mainRouter);
 
