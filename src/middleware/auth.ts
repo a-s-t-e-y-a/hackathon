@@ -25,19 +25,20 @@ const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
       ?.toString()
       .replace("Bearer ", "");
 
-    if (userToken) {
+    if (userToken != "Bearer") {
+      console.log(true)
       // Verify and decode user token
-      const userPayload = jwt.verify(userToken, JWT_SECRET) as { id: string };
+      const userPayload = jwt.verify(userToken, JWT_SECRET);
       req.userId = userPayload.id;
     }
-
-    if (eventOrganiserToken) {
+    if (eventOrganiserToken != "Bearer") {
       // Verify and decode event organiser token
       const eventOrganiserPayload = jwt.verify(
         eventOrganiserToken,
         JWT_SECRET,
-      ) as { id: string };
-      req.eventOrganiserId = eventOrganiserPayload.id;
+      );
+      console.log(eventOrganiserPayload)
+      req.eventOrganiserId = eventOrganiserPayload.userId;
     }
 
     next();

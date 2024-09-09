@@ -34,10 +34,8 @@ const eventInit = async (req: any, res) => {
       });
     } else {
       // Handle unexpected errors
-      res.status(500).json({
-        message: "Internal server error",
-        error: err.message,
-      });
+      console.log(err)
+      res.status(500).send(err)
     }
   }
 };

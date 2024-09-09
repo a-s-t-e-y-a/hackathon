@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import supabase from "../../../middleware/supabase";
 import logger from "../../../../config/winstion";
+import { uuid } from 'uuidv4';
 interface Authenticate extends Request {
   fileUrl: string;
   file: any
@@ -12,10 +13,10 @@ const getUploads = async (req: Authenticate, res: Response): Promise<any> => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    const { originalname, buffer } = req.file;
+    const { buffer } = req.file;
     const { data, error } = await supabase.storage
       .from('evc') // Replace with your bucket name
-      .upload(originalname, buffer, {
+      .upload(uuid(), buffer, {
         contentType: req.file.mimetype,
       });
 
