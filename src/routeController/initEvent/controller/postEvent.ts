@@ -2,7 +2,7 @@ import { ZodError } from "zod";
 import prisma from "../../../../config/prisma.config";
 import eventInitZod from "../../../zod/eventInit";
 
-const eventInit = async (req, res) => {
+const eventInit = async (req: any, res) => {
   try {
     const data_ = eventInitZod.parse(req.body);
 
@@ -13,7 +13,7 @@ const eventInit = async (req, res) => {
         about: data_.about,
         price: data_.price,
         image: data_.image,
-        eventOrganiser: { connect: { id: data_.eventOrganiserId } },
+        eventOrganiser: { connect: { id: req.eventOrganiserId } },
       },
     });
 
