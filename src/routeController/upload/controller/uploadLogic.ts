@@ -3,7 +3,7 @@ import supabase from "../../../middleware/supabase";
 
 const uploadSupabase = async (req, res) => {
   try {
-    if (!req.file) {
+    if (!req.image) {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
