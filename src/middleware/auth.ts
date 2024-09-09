@@ -10,6 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 interface AuthRequest extends Request {
   userId?: string;
   eventOrganiserId?: string;
+  headers: any;
 }
 
 const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
