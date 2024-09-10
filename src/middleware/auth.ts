@@ -38,7 +38,7 @@ const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
         JWT_SECRET,
       );
       console.log(eventOrganiserPayload)
-      req.eventOrganiserId = eventOrganiserPayload.userId;
+      req.eventOrganiserId = eventOrganiserPayload.id;
     }
 
     next();

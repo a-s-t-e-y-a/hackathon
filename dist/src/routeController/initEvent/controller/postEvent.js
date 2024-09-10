@@ -14,34 +14,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const zod_1 = require("zod");
 const prisma_config_1 = __importDefault(require("../../../../config/prisma.config"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const userAuth_1 = require("../../../zod/userAuth");
-const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const eventInit_1 = __importDefault(require("../../../zod/eventInit"));
+const eventInit = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data_ = userAuth_1.userAuthZod.parse(req.body);
-        const salt = yield bcrypt_1.default.genSalt(10);
-        const hashedPassword = yield bcrypt_1.default.hash(data_.password, salt);
-        const data = yield prisma_config_1.default.user.create({
+        const data_ = eventInit_1.default.parse(req.body);
+        const info = yield prisma_config_1.default.event.create({
             data: {
-                name: data_.name,
-                email: data_.email,
-                password: hashedPassword,
+                eventName: data_.eventName,
+                ticketNo: data_.ticketNo,
+                about: data_.about,
+                price: data_.price,
+                image: data_.image,
+                eventOrganiser: { connect: { id: req.eventOrganiserId } },
             },
         });
-        res.status(200).json({ message: "Validation successful", data });
+        res.status(201).json({
+            message: "Event created successfully",
+            info,
+        });
     }
     catch (err) {
         if (err instanceof zod_1.ZodError) {
-            res
-                .status(400)
-                .json({ message: "Validation failed", errors: err.errors });
+            res.status(400).json({
+                message: "Validation failed",
+                errors: err.errors,
+            });
+        }
+        else if (err.name === "PrismaClientKnownRequestError") {
+            res.status(400).json({
+                message: "Database error",
+                error: err.message,
+            });
         }
         else {
-            res
-                .status(500)
-                .json({ message: "Internal server error", error: err.message });
+            // Handle unexpected errors
+            console.log(err);
+            res.status(500).send(err);
         }
     }
 });
-exports.default = signup;
-//# sourceMappingURL=post.js.map
+exports.default = eventInit;
+//# sourceMappingURL=postEvent.js.map

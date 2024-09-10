@@ -1,11 +1,11 @@
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String
-  password String
-  createAt DateTime @default(now())
-  event    event[]  @relation(fields: [eventId], references: [id])
-  eventId  String[] @db.ObjectId
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String
+  password     String
+  createAt     DateTime       @default(now())
+  ticket       ticket[]
+  reSellTicket reSellTicket[]
 }
 
 model eventOrganiser {
@@ -25,8 +25,32 @@ model event {
   price            Int
   image            String
   time             String
+  hash             String
+  data             String
+  from             String
+  eventNumber      Int
   eventOrganiser   eventOrganiser? @relation(fields: [eventOrganiserId], references: [id])
   eventOrganiserId String?         @db.ObjectId
-  User             User[]          @relation(fields: [userId], references: [id])
-  userId           String[]        @db.ObjectId
+}
+
+model ticket {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  ticketId Int     @default(0)
+  hash     String
+  data     String
+  from     String
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   String? @db.ObjectId
+}
+
+model reSellTicket {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  eventId     String
+  ticketId    String
+  resalePrice String
+  hash        String
+  data        String
+  from        String
+  User        User?   @relation(fields: [userId], references: [id])
+  userId      String? @db.ObjectId
 }

@@ -36,7 +36,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(401).json({ message: "Invalid email or password" });
         }
         // Generate a JWT token
-        const token = jsonwebtoken_1.default.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jsonwebtoken_1.default.sign({ id: user.id, email: user.email }, JWT_SECRET);
         // Send the token in the response
         res.status(200).json({
             message: "Login successful user",

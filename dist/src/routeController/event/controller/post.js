@@ -24,7 +24,7 @@ const postEventAuth = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const data = yield prisma_config_1.default.eventOrganiser.create({
             data: {
                 name: data_.name,
-                email: data_.name,
+                email: data_.email,
                 password: hashedPassword,
             },
         });
