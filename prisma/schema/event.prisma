@@ -24,6 +24,7 @@ model event {
   about            String
   price            Int
   image            String
+  time             String
   eventOrganiser   eventOrganiser? @relation(fields: [eventOrganiserId], references: [id])
   eventOrganiserId String?         @db.ObjectId
   User             User[]          @relation(fields: [userId], references: [id])

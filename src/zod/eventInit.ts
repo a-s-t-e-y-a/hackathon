@@ -6,6 +6,7 @@ const eventInitZod = z.object({
   about: z.string().min(1, "About field cannot be empty"), // Ensure non-empty about field
   price: z.number(),
   image: z.string(),
+  time: z.string(),
 });
 
 export default eventInitZod;
